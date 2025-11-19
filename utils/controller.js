@@ -568,7 +568,7 @@ const getTokenAllocation = async (argv) => {
     const category = argv.category;
     const allocation = await contract.getCategoryAllocation(category);
 
-    console.log("Category allocation: ", ethers.formatEther(allocation));
+    console.log("Category allocation total: ", ethers.formatEther(allocation));
   } catch (error) {
     console.error(error.message);
   }

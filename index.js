@@ -6,21 +6,60 @@ const { string } = require("yargs");
 // CLI setup
 yargs(hideBin(process.argv))
   .command(
-    "setVestingWallet <wallet> <category>",
-    "Set vesting wallet to category",
+    "parseEther <value>",
+    "Parse value to ether format",
     {
-      wallet: {
+      value: {
+        type: "number",
+      },
+    },
+    controller.parseEtherValue
+  )
+  .command(
+    "formatEther <value>",
+    "Format ether value",
+    {
+      value: {
+        type: "number",
+      },
+    },
+    controller.formatEtherValue
+  )
+  .command("generateTGETime", "Generate TGE Time value", {}, controller.generateTGETime)
+  .command("setTGETime", "set TGE time for vesting", {}, controller.setTGETime)
+  .command(
+    "transferToken <amount>",
+    "transfer amount of tokens to smart contract",
+    {
+      amount: {
+        type: "number",
+      },
+    },
+    controller.transferToken
+  )
+  .command(
+    "checkTokenBalance <address>",
+    "Check talax balance on address",
+    {
+      address: {
         type: "string",
       },
+    },
+    controller.checkTokenBalance
+  )
+  .command(
+    "getCategoryConfig <category>",
+    "Get all category config data",
+    {
       category: {
         type: "number",
       },
     },
-    controller.setVestingWallet
+    controller.getCategoryConfig
   )
   .command(
-    "addNewVestingSchedule <beneficiary> <category> <collectionAmount>",
-    "Create new vesting schedules",
+    "createVestingSchedule <beneficiary> <category> <collectionAmount>",
+    "Create new vesting schedule",
     {
       beneficiary: {
         type: "string",
@@ -32,65 +71,11 @@ yargs(hideBin(process.argv))
         type: "number",
       },
     },
-    controller.addNewVestingSchedule
-  )
-  .command("setTGETime", "Set vesting TGE time", {}, controller.setTGETime)
-  .command(
-    "getTokenAllocation <category>",
-    "Get total token category value",
-    {
-      category: {
-        type: "number",
-      },
-    },
-    controller.getTokenAllocation
+    controller.createVestingSchedule
   )
   .command(
-    "checkTalaxBalance <wallet>",
-    "Check talax token balance",
-    {
-      wallet: {
-        type: "string",
-      },
-    },
-    controller.checkTalaxBalance
-  )
-  .command(
-    "getVestingWallet <category>",
-    "Get vesting wallet talaxeum",
-    {
-      category: {
-        type: "number",
-      },
-    },
-    controller.getVestingWallet
-  )
-  .command(
-    "transferAllocationWallet <category> <signer>",
-    "Transfer vesting allocation wallet",
-    {
-      category: {
-        type: "number",
-      },
-      signer: {
-        type: "string",
-      },
-    },
-    controller.transferAllocationWallet
-  )
-  .command(
-    "transferToken <supply>",
-    "Transfer token to smart contract",
-    {
-      supply: {
-        type: "number",
-      },
-    },
-    controller.transferToken
-  )
-  .command(
-    "getVestingScheduleByCategory <beneficiary> <category> <indexMonth>",
-    "Get vesting schedule data",
+    "getVestingSchedule <beneficiary> <category>",
+    "Get benefciary vesting schedule",
     {
       beneficiary: {
         type: "string",
@@ -98,55 +83,12 @@ yargs(hideBin(process.argv))
       category: {
         type: "number",
       },
-      indexMonth: {
-        type: "number",
-      },
     },
-    controller.getVestingScheduleByCategory
-  )
-  .command(
-    "getVestingScheduleByMonth <beneficiary> <category> <monthAfterCliff>",
-    "Get vesting schedule data",
-    {
-      beneficiary: {
-        type: "string",
-      },
-      category: {
-        type: "number",
-      },
-      monthAfterCliff: {
-        type: "number",
-      },
-    },
-    controller.getVestingScheduleByMonth
-  )
-  .command(
-    "addAdminAccount <address>",
-    "Add admin account",
-    {
-      address: {
-        type: "string",
-      },
-    },
-    controller.addAdminAccount
-  )
-  .command(
-    "getAllFunctionSchedule",
-    "Get all vesting schedule",
-    {},
-    controller.getAllVestingSchedule
-  )
-  .command("getAllAdmins", "Get all admin accounts", {}, controller.getAllAdmins)
-  .command("getAllVestingData", "Get all vesting data", {}, controller.getAllVestingData)
-  .command(
-    "generateDateInt",
-    "Generate big int date format",
-    {},
-    controller.generateDateInt
+    controller.getVestingSchedule
   )
   .command(
     "claimToken <category> <vestingMonth> <signer>",
-    "Claim token",
+    "Claim token for beneficiary",
     {
       category: {
         type: "number",
@@ -158,108 +100,7 @@ yargs(hideBin(process.argv))
         type: "string",
       },
     },
-    controller.claimVested
-  )
-  .command(
-    "updateCategoryConfig <category> <name> <totalAllocation> <priceSale> <tgePercent> <cliffMonth> <vestingPeriod> <isActive>",
-    "Claim token",
-    {
-      category: {
-        type: "number",
-      },
-      name: {
-        type: "string",
-      },
-      totalAllocation: {
-        type: "string",
-      },
-      priceSale: {
-        type: "string",
-      },
-      tgePercent: {
-        type: "string",
-      },
-      cliffMonth: {
-        type: "number",
-      },
-      vestingPeriod: {
-        type: "number",
-      },
-      isActive: {
-        type: "boolean",
-      },
-    },
-    controller.updateCategoryConfig
-  )
-  .command(
-    "addNewCategoryConfig <category> <name> <totalAllocation> <priceSale> <tgePercent> <cliffMonth> <vestingPeriod> <isActive>",
-    "Add new category configuration",
-    {
-      category: {
-        type: "number",
-      },
-      name: {
-        type: "string",
-      },
-      totalAllocation: {
-        type: "string",
-      },
-      priceSale: {
-        type: "string",
-      },
-      tgePercent: {
-        type: "string",
-      },
-      cliffMonth: {
-        type: "number",
-      },
-      vestingPeriod: {
-        type: "number",
-      },
-      isActive: {
-        type: "boolean",
-      },
-    },
-    controller.addNewCategoryConfig
-  )
-  .command(
-    "restartVestingSchedule <beneficiary> <category> <collectionAmount> <newStartDate>",
-    "Restart a schedule",
-    {
-      beneficiary: {
-        type: "string",
-      },
-      category: {
-        type: "number",
-      },
-      collectionAmount: {
-        type: "string",
-      },
-      newStartDate: {
-        type: "number",
-      },
-    },
-    controller.restartVestingSchedule
-  )
-  .command(
-    "parseEtherValue <value>",
-    "Parsing a value to ether format",
-    {
-      value: {
-        type: "number",
-      },
-    },
-    controller.parseEtherValue
-  )
-  .command(
-    "formatEtherValue <value>",
-    "Format a ether value",
-    {
-      value: {
-        type: "number",
-      },
-    },
-    controller.formatEtherValue
+    controller.claimToken
   )
   .demandCommand(1, "You need to provide a command")
   .help().argv;

@@ -102,5 +102,63 @@ yargs(hideBin(process.argv))
     },
     controller.claimToken
   )
+  .command(
+    "revokeVestingSchedule <beneficiary> <category> <vestingMonth>",
+    "Revoke vesting schedule based on vesting month and category",
+    {
+      beneficiary: {
+        type: "string",
+      },
+      category: {
+        type: "number",
+      },
+      vestingMonth: {
+        type: "number",
+      },
+    },
+    controller.revokeVestingSchedule
+  )
+  .command(
+    "unRevokeVestingSchedule <beneficiary> <category> <vestingMonth>",
+    "Un-revoke vesting schedule based on vesting month and category",
+    {
+      beneficiary: {
+        type: "string",
+      },
+      category: {
+        type: "number",
+      },
+      vestingMonth: {
+        type: "number",
+      },
+    },
+    controller.unRevokeVestingSchedule
+  )
+  .command(
+    "getClaimableToken <category> <signer>",
+    "Get calculated claimable tokens",
+    {
+      category: {
+        type: "number",
+      },
+      signer: {
+        type: "string",
+      },
+    },
+    controller.getClaimableToken
+  )
+  .command(
+    "getLockedToken <category> <signer>",
+    "Get calculated claimable tokens",
+    {
+      category: {
+        type: "number",
+      },
+      signer: {
+        type: "string",
+      },
+    },
+    controller.getLockedToken
+  )
   .demandCommand(1, "You need to provide a command")
   .help().argv;

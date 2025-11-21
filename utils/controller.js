@@ -95,7 +95,7 @@ const restartVestingSchedule = async (argv) => {
 
 const setTGETime = async (argv) => {
   try {
-    const tgeTime = Math.floor(new Date().getTime() / 1000) + 30;
+    const tgeTime = Math.floor(new Date().getTime() / 1000);
     await contract.setTGETime(tgeTime);
 
     console.log("Successfully add new TGE time");
@@ -145,6 +145,7 @@ const getVestingSchedule = async (argv) => {
       console.log("Category: ", Number(schedule.category));
       console.log("Is TGE: ", schedule.isTGE);
       console.log("Claimble Token: ", ethers.formatEther(schedule.claimableToken));
+      console.log("Locked Token: ", ethers.formatEther(schedule.lockedToken));
       console.log(
         "Start date: ",
         new Date(Number(schedule.startDate) * 1000).toDateString()
@@ -186,6 +187,56 @@ const checkTokenBalance = async (argv) => {
   }
 };
 
+const revokeVestingSchedule = async (argv) => {
+  try {
+    await contract.revokeVestingSchedule(
+      argv.beneficiary,
+      argv.category,
+      argv.vestingMonth
+    );
+    console.log("Successfully revoke vesting schedule!");
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const unRevokeVestingSchedule = async (argv) => {
+  try {
+    await contract.unRevokeVestingSchedule(
+      argv.beneficiary,
+      argv.category,
+      argv.vestingMonth
+    );
+    console.log("Successfully un-revoke vesting schedule!");
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const getClaimableToken = async (argv) => {
+  try {
+    const runner = otherSigner(argv.signer);
+    const claimableToken = await contract
+      .connect(runner)
+      .getClaimableToken(argv.category);
+
+    console.log(ethers.formatEther(claimableToken), "TALAX");
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const getLockedToken = async (argv) => {
+  try {
+    const runner = otherSigner(argv.signer);
+    const lockedToken = await contract.connect(runner).getLockedToken(argv.category);
+
+    console.log(ethers.formatEther(lockedToken), "TALAX");
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
 module.exports = {
   parseEtherValue,
   formatEtherValue,
@@ -199,4 +250,8 @@ module.exports = {
   getVestingSchedule,
   claimToken,
   checkTokenBalance,
+  revokeVestingSchedule,
+  unRevokeVestingSchedule,
+  getClaimableToken,
+  getLockedToken,
 };

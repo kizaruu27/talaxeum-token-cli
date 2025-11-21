@@ -237,6 +237,84 @@ const getLockedToken = async (argv) => {
   }
 };
 
+function toSingleLine(arr) {
+  return (
+    "[" +
+    arr
+      .map((obj) => {
+        const tuple = [obj.beneficiary, obj.category, obj.collectionAmount];
+
+        return (
+          "[" +
+          tuple
+            .map((v) => (typeof v === "bigint" ? v.toString() + "n" : JSON.stringify(v)))
+            .join(",") +
+          "]"
+        );
+      })
+      .join(",") +
+    "]"
+  );
+}
+
+const generateTuple = async (argv) => {
+  const vestingInput = [
+    {
+      beneficiary: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      category: 0,
+      collectionAmount: ethers.parseEther(Number(100).toString()),
+    },
+    {
+      beneficiary: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      category: 0,
+      collectionAmount: ethers.parseEther(Number(200).toString()),
+    },
+    {
+      beneficiary: "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+      category: 0,
+      collectionAmount: ethers.parseEther(Number(450).toString()),
+    },
+  ];
+
+  console.log(toSingleLine(vestingInput));
+};
+
+const createVestingScheduleBatch = async (argv) => {
+  try {
+    const vestingInput = [
+      {
+        beneficiary: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+        category: 0,
+        collectionAmount: ethers.parseEther("100"),
+      },
+      {
+        beneficiary: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+        category: 0,
+        collectionAmount: ethers.parseEther("200"),
+      },
+      {
+        beneficiary: "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+        category: 0,
+        collectionAmount: ethers.parseEther("450"),
+      },
+    ];
+
+    await contract.createVestingScheduleBatch(vestingInput);
+
+    console.log("Batched vesting schedule successfully created");
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const getAllVestingData = async (argv) => {
+  try {
+    const vestingData = await contract.getAllVestingData();
+    console.log(vestingData);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 module.exports = {
   parseEtherValue,
   formatEtherValue,
@@ -254,4 +332,7 @@ module.exports = {
   unRevokeVestingSchedule,
   getClaimableToken,
   getLockedToken,
+  generateTuple,
+  createVestingScheduleBatch,
+  getAllVestingData,
 };

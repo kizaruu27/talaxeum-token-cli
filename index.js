@@ -26,7 +26,20 @@ yargs(hideBin(process.argv))
     controller.formatEtherValue
   )
   .command("generateTGETime", "Generate TGE Time value", {}, controller.generateTGETime)
+  .command("generateTuple", "Generate tuple data", {}, controller.generateTuple)
   .command("setTGETime", "set TGE time for vesting", {}, controller.setTGETime)
+  .command(
+    "createVestingScheduleBatch",
+    "Create vesting schedule from array",
+    {},
+    controller.createVestingScheduleBatch
+  )
+  .command(
+    "getAllVestingData",
+    "Get all vesting schedule data",
+    {},
+    controller.getAllVestingData
+  )
   .command(
     "transferToken <amount>",
     "transfer amount of tokens to smart contract",

@@ -173,5 +173,28 @@ yargs(hideBin(process.argv))
     },
     controller.getLockedToken
   )
+  .command(
+    "transferAllocation <category>",
+    "Transfer allocation to vesting wallet",
+    {
+      category: {
+        type: "number",
+      },
+    },
+    controller.transferAllocation
+  )
+  .command(
+    "transferTokenToContract <category> <isTGE>",
+    "Transfer allocation to vesting smart contract",
+    {
+      category: {
+        type: "number",
+      },
+      isTGE: {
+        type: "boolean",
+      },
+    },
+    controller.transferTokenToContract
+  )
   .demandCommand(1, "You need to provide a command")
   .help().argv;

@@ -8,6 +8,7 @@ const {
   wallet,
   otherSigner,
 } = require("../scripts/contract");
+const { vestingWallets } = require("../lib/lib");
 
 const transferToken = async (argv) => {
   try {
@@ -17,6 +18,53 @@ const transferToken = async (argv) => {
 
     const balance = await talaxeumContract.balanceOf(contract);
     console.log("Current TALAX balance: ", ethers.formatEther(balance));
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const transferAllocation = async (argv) => {
+  const category = argv.category;
+
+  try {
+    const vestingWalletAddress = vestingWallets.filter(
+      (wallet) => wallet.id === category
+    )[0];
+
+    await talaxeumContract.transfer(
+      vestingWalletAddress.wallet,
+      ethers.parseEther(vestingWalletAddress.totalAllocation)
+    );
+
+    console.log("Successfully transfer allocation to: ", vestingWalletAddress.name);
+
+    const balance = await talaxeumContract.balanceOf(vestingWalletAddress.wallet);
+    console.log("Current TALAX balance: ", ethers.formatEther(balance));
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const transferTokenToContract = async (argv) => {
+  const category = argv.category;
+  const isTGE = argv.isTGE;
+
+  try {
+    const vestingWalletAddress = vestingWallets.filter(
+      (wallet) => wallet.id === category
+    )[0];
+
+    const amount = isTGE
+      ? ethers.parseEther(vestingWalletAddress.tgeAllocation)
+      : ethers.parseEther(vestingWalletAddress.monthlyAllocation);
+
+    const runner = otherSigner(vestingWalletAddress.privateKey);
+
+    await talaxeumContract.connect(runner).directTransfer(contract, amount);
+    console.log("Successfully direct transfer to vesting smart contract...");
+
+    const balance = await talaxeumContract.balanceOf(contract);
+    console.log("TALAX balance: ", ethers.formatEther(balance));
   } catch (error) {
     console.error(error.message);
   }
@@ -335,4 +383,6 @@ module.exports = {
   generateTuple,
   createVestingScheduleBatch,
   getAllVestingData,
+  transferAllocation,
+  transferTokenToContract,
 };

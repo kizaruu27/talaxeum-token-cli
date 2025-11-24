@@ -363,6 +363,36 @@ const getAllVestingData = async (argv) => {
     console.error(error.message);
   }
 };
+
+const setVestingWallet = async (argv) => {
+  try {
+    const category = argv.category;
+    const wallet = vestingWallets.filter((wallet) => wallet.id === category)[0].wallet;
+
+    await contract.setVestingWallets(wallet, category);
+    console.log("Successfully add vesting wallet");
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const transferAllocationWallet = async (argv) => {
+  try {
+    await contract.transferAllocationWallet();
+    console.log("Successfully transfer allocation to wallet vesting");
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const getVestingWallet = async (argv) => {
+  try {
+    const vestingWallet = await contract.getVestingWallet(argv.category);
+    console.log(vestingWallet);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 module.exports = {
   parseEtherValue,
   formatEtherValue,
@@ -385,4 +415,7 @@ module.exports = {
   getAllVestingData,
   transferAllocation,
   transferTokenToContract,
+  setVestingWallet,
+  transferAllocationWallet,
+  getVestingWallet,
 };

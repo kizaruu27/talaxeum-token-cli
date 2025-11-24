@@ -196,5 +196,31 @@ yargs(hideBin(process.argv))
     },
     controller.transferTokenToContract
   )
+  .command(
+    "setVestingWallet <category>",
+    "Set vesting wallet address",
+    {
+      category: {
+        type: "number",
+      },
+    },
+    controller.setVestingWallet
+  )
+  .command(
+    "transferAllocationWallet",
+    "Transfer wallet allocation",
+    {},
+    controller.transferAllocationWallet
+  )
+  .command(
+    "getVestingWallet <category>",
+    "Get vesting wallet by category",
+    {
+      category: {
+        type: "number",
+      },
+    },
+    controller.getVestingWallet
+  )
   .demandCommand(1, "You need to provide a command")
   .help().argv;

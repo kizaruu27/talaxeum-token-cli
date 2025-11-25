@@ -124,8 +124,8 @@ const restartVestingSchedule = async (argv) => {
     const params = {
       beneficiary: argv.beneficiary,
       category: argv.category,
-      collectionAmount: ethers.parseEther(argv.collectionAmount),
-      newStartDate: argv.newStartDate,
+      collectionAmount: ethers.parseEther(argv.collectionAmount.toString()),
+      newStartDate: Math.floor(new Date().getTime() / 1000),
     };
 
     await contract.restartVestingSchedule(
@@ -393,6 +393,35 @@ const getVestingWallet = async (argv) => {
     console.error(error.message);
   }
 };
+
+const addAllowedAddress = async (argv) => {
+  try {
+    const address = await contract.getAddress();
+    await talaxeumContract.addAllowedAddress(address);
+
+    console.log("Successfully add allowed address to talax token");
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const getAllVestingWallets = async (argv) => {
+  try {
+    const vestingWallet = await contract.getAllVestingWallet();
+    console.log(vestingWallet);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const transferAllocationVestingWalletByCategory = async (argv) => {
+  try {
+    await contract.transferAllocationVestingWalletByCategory(argv.category);
+    console.log("Successfully transfer allocation vesting!");
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 module.exports = {
   parseEtherValue,
   formatEtherValue,
@@ -418,4 +447,7 @@ module.exports = {
   setVestingWallet,
   transferAllocationWallet,
   getVestingWallet,
+  addAllowedAddress,
+  getAllVestingWallets,
+  transferAllocationVestingWalletByCategory,
 };

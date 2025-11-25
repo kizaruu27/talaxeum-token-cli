@@ -29,6 +29,18 @@ yargs(hideBin(process.argv))
   .command("generateTuple", "Generate tuple data", {}, controller.generateTuple)
   .command("setTGETime", "set TGE time for vesting", {}, controller.setTGETime)
   .command(
+    "getAllVestingWallets",
+    "Get all vesting wallets",
+    {},
+    controller.getAllVestingWallets
+  )
+  .command(
+    "addAllowedAddress",
+    "Add allowed address to talax token",
+    {},
+    controller.addAllowedAddress
+  )
+  .command(
     "createVestingScheduleBatch",
     "Create vesting schedule from array",
     {},
@@ -71,6 +83,16 @@ yargs(hideBin(process.argv))
     controller.getCategoryConfig
   )
   .command(
+    "transferAllocationVestingWalletByCategory <category>",
+    "Transfer allocation by category",
+    {
+      category: {
+        type: "number",
+      },
+    },
+    controller.transferAllocationVestingWalletByCategory
+  )
+  .command(
     "createVestingSchedule <beneficiary> <category> <collectionAmount>",
     "Create new vesting schedule",
     {
@@ -85,6 +107,22 @@ yargs(hideBin(process.argv))
       },
     },
     controller.createVestingSchedule
+  )
+  .command(
+    "restartVestingSchedule <beneficiary> <category> <collectionAmount>",
+    "Create new vesting schedule",
+    {
+      beneficiary: {
+        type: "string",
+      },
+      category: {
+        type: "number",
+      },
+      collectionAmount: {
+        type: "number",
+      },
+    },
+    controller.restartVestingSchedule
   )
   .command(
     "getVestingSchedule <beneficiary> <category>",

@@ -119,6 +119,15 @@ const addNewCategoryConfig = async (argv) => {
   }
 };
 
+const getAllCategoryConfig = async (argv) => {
+  try {
+    const categoryConfigs = await contract.getAllCategoryConfig();
+    console.log(categoryConfigs);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
 const restartVestingSchedule = async (argv) => {
   try {
     const params = {
@@ -422,6 +431,7 @@ const transferAllocationVestingWalletByCategory = async (argv) => {
     console.error(error.message);
   }
 };
+
 module.exports = {
   parseEtherValue,
   formatEtherValue,
@@ -450,4 +460,5 @@ module.exports = {
   addAllowedAddress,
   getAllVestingWallets,
   transferAllocationVestingWalletByCategory,
+  getAllCategoryConfig,
 };

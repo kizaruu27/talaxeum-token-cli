@@ -83,6 +83,12 @@ yargs(hideBin(process.argv))
     controller.getCategoryConfig
   )
   .command(
+    "getAllCategoryConfig",
+    "Get all category configs",
+    {},
+    controller.getAllCategoryConfig
+  )
+  .command(
     "transferAllocationVestingWalletByCategory <category>",
     "Transfer allocation by category",
     {

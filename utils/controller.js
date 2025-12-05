@@ -7,6 +7,7 @@ const {
   talaxeumContract,
   wallet,
   otherSigner,
+  provider,
 } = require("../scripts/contract");
 const { vestingWallets } = require("../lib/lib");
 
@@ -432,6 +433,36 @@ const transferAllocationVestingWalletByCategory = async (argv) => {
   }
 };
 
+const skip1Month = async (argv) => {
+  try {
+    const secondsInMonth = 30 * 24 * 60 * 60;
+    console.log("Fast forward 1 month...");
+
+    await provider.send("evm_increaseTime", [secondsInMonth]);
+    await provider.send("evm_mine");
+    console.log("Fast forward successfull");
+
+    const latestBlock = await provider.getBlock("latest");
+    const currentTime = new Date(latestBlock.timestamp * 1000);
+
+    console.log("Current time: ", currentTime);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const getClaimTokenHistory = async (argv) => {
+  try {
+    const signer = argv.signer;
+    const runner = otherSigner(signer);
+
+    const claimHistory = await contract.connect(runner).getTokenClaimHistory();
+    console.log(claimHistory);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
 module.exports = {
   parseEtherValue,
   formatEtherValue,
@@ -461,4 +492,6 @@ module.exports = {
   getAllVestingWallets,
   transferAllocationVestingWalletByCategory,
   getAllCategoryConfig,
+  skip1Month,
+  getClaimTokenHistory,
 };

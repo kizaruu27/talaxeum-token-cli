@@ -100,4 +100,5 @@ module.exports = {
   callViewFunction,
   wallet,
   otherSigner,
+  provider,
 };

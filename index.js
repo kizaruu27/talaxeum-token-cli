@@ -29,6 +29,12 @@ yargs(hideBin(process.argv))
   .command("generateTuple", "Generate tuple data", {}, controller.generateTuple)
   .command("setTGETime", "set TGE time for vesting", {}, controller.setTGETime)
   .command(
+    "skipOneMonth",
+    "For fast forward 1 month on local evm",
+    {},
+    controller.skip1Month
+  )
+  .command(
     "getAllVestingWallets",
     "Get all vesting wallets",
     {},
@@ -142,6 +148,32 @@ yargs(hideBin(process.argv))
       },
     },
     controller.getVestingSchedule
+  )
+  .command(
+    "claimToken <category> <vestingMonth> <signer>",
+    "Claim token for beneficiary",
+    {
+      category: {
+        type: "number",
+      },
+      vestingMonth: {
+        type: "number",
+      },
+      signer: {
+        type: "string",
+      },
+    },
+    controller.claimToken
+  )
+  .command(
+    "getClaimHistory <signer>",
+    "Get claim history for beneficiary address",
+    {
+      signer: {
+        type: "string",
+      },
+    },
+    controller.getClaimTokenHistory
   )
   .command(
     "claimToken <category> <vestingMonth> <signer>",

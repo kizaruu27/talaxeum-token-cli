@@ -166,11 +166,14 @@ yargs(hideBin(process.argv))
     controller.claimToken
   )
   .command(
-    "getClaimHistory <signer>",
+    "getClaimHistory <signer> <category>",
     "Get claim history for beneficiary address",
     {
       signer: {
         type: "string",
+      },
+      category: {
+        type: "number",
       },
     },
     controller.getClaimTokenHistory

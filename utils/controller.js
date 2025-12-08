@@ -454,9 +454,10 @@ const skip1Month = async (argv) => {
 const getClaimTokenHistory = async (argv) => {
   try {
     const signer = argv.signer;
+    const category = argv.category;
     const runner = otherSigner(signer);
 
-    const claimHistory = await contract.connect(runner).getTokenClaimHistory();
+    const claimHistory = await contract.connect(runner).getTokenClaimHistory(category);
     console.log(claimHistory);
   } catch (error) {
     console.error(error.message);
